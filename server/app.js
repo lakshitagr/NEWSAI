@@ -1,22 +1,15 @@
-import express from 'express'
-import mongoose from 'mongoose'
-import dotenv from 'dotenv'
-
+import express from 'express';
+import dotenv from 'dotenv';
+import dbConnect from './config/db.js';
+import userRoutes from './routes/userRoutes.js';
 const app = express();
-dotenv.config();
 
 app.use(express.json())
+dotenv.config();
 
-mongoose.connect(process.env.MONGODB_URI).then(()=>{
-    console.log('Connection is successfull......');
-})
+dbConnect();
 
-
-app.listen(process.env.PORT || 3000, () => {
-    console.log(`Server is running ${process.env.PORT}......`);
-  });
-
-
-  //git log --all (show all version)
-  //git checkout (shift particuler version)
-  
+app.use('/auth', userRoutes);
+app.listen(process.env.PORT, () => {
+  console.log(`Server is running on the PORT ${process.env.PORT}`);
+});
